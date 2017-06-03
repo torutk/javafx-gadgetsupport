@@ -1,7 +1,7 @@
 /*
  * © 2017 TAKAHASHI,Toru
  */
-package com.torutk.javafx.gadget.support;
+package com.torutk.gadget.support;
 
 import java.util.prefs.Preferences;
 import javafx.scene.Scene;
