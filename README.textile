@@ -1,0 +1,39 @@
+h1. JavaFX Gadget Support Libraries.
+
+Desktop gadget programs have common functions such as...
+
+* Transparent Window
+** no border, no title-bar, transparent background
+* Move by mouse dragging
+* Resize by mouse wheel plus some key (e.g. Ctrl key)
+* Popup menu to close window
+* Save last position and size, load such status at next start.
+
+It is boilerplate code to implement these common functions in each gadget
+program.
+
+This JavaFX Gadget Support Libraries provide common gadget functions to your
+gadget program without boilerplate code.
+
+h2. Sample coding for JavaFX Application
+
+This is a sample JavaFX application using JavaFX Gadget Support Libraries.
+Only 1-line code in your application is needed for gadget common functions.
+
+<pre>
+
+public class TinyGadgetApp extends Application {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        new TinyGadgetSupport(stage, Preferences.userNodeForPackage(this.getClass()));
+        Parent root = FXMLLoader.load(getClass().getResource("TinyGadgetView.fxml"));
+        
+        Scene scene = new Scene(root);
+
+        stage.setScene(scene);
+        stage.show();
+    }
+}
+</pre>
+
