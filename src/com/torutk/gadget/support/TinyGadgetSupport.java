@@ -46,7 +46,21 @@ import javafx.stage.WindowEvent;
  * }
  * }</pre>
  * </ol>
- * 
+ * 使用上の注意点
+ * <ul>
+ * <li>状態を保存するタイミングをウィンドウが閉じるときに行うため、stageのsetOnCloseRequestメソッドでリスナー登録しています。
+ * 本クラスを利用するアプリケーション側でも setOnCloseRequest を呼ぶ場合、実行順番によりどちらかのリスナーが無効となります。
+ * 回避策は、setOnCloseRequestをする前にgetOnCloseRequestを呼び、ハンドラが登録されていればそれを含めたハンドラを登録します。
+ * <pre>{@code 
+ *   EventHandler<WindowEvent> currentHandler = stage.getOnCloseRequest();
+ *   stage.setOnCloseRequest(e -> {
+ *       if (currentHandler != null) {
+ *           currentHundler.handle(e);
+ *       }
+ *       // .. 本来の処理
+ *   });
+ * }</pre>
+ * </ul>
  */
 public class TinyGadgetSupport {
     private static final int MIN_WIDTH = 128;
