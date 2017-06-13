@@ -11,7 +11,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
 /**
  * ガジェットプログラムに共通する振る舞いをユーティリティとして提供するクラス。
@@ -46,21 +45,6 @@ import javafx.stage.WindowEvent;
  * }
  * }</pre>
  * </ol>
- * 使用上の注意点
- * <ul>
- * <li>状態を保存するタイミングをウィンドウが閉じるときに行うため、stageのsetOnCloseRequestメソッドでリスナー登録しています。
- * 本クラスを利用するアプリケーション側でも setOnCloseRequest を呼ぶ場合、実行順番によりどちらかのリスナーが無効となります。
- * 回避策は、setOnCloseRequestをする前にgetOnCloseRequestを呼び、ハンドラが登録されていればそれを含めたハンドラを登録します。
- * <pre>{@code 
- *   EventHandler<WindowEvent> currentHandler = stage.getOnCloseRequest();
- *   stage.setOnCloseRequest(e -> {
- *       if (currentHandler != null) {
- *           currentHundler.handle(e);
- *       }
- *       // .. 本来の処理
- *   });
- * }</pre>
- * </ul>
  */
 public class TinyGadgetSupport {
     private static final int MIN_WIDTH = 128;
@@ -191,17 +175,18 @@ public class TinyGadgetSupport {
     private ContextMenu createContextMenu(Stage stage) {
         MenuItem exitItem = new MenuItem("終了");
         exitItem.setStyle("-fx-font-size: 2em");
-        exitItem.setOnAction(event -> {
-            stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-        });
+        exitItem.setOnAction(event -> stage.close());
+
         ContextMenu popup = new ContextMenu(exitItem);
         return popup;
     }
     
     protected void setupStatusResume() {
         // ウィンドウが終了するときに状態を保存
-        stage.setOnCloseRequest(event -> {
-            saveStatus();
+        stage.showingProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue == true && newValue == false) {
+                saveStatus();
+            }
         });
         
         // 保存した状態があれば復元
