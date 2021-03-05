@@ -157,6 +157,7 @@ public class TinyGadgetSupport {
      * 本コンストラクタを使用した場合、終了時の状態保存と起動時の復元は行わない。
      * 
      * @param stage ガジェットの振る舞いを提供する対象 stage
+     * @deprecated コンストラクタではなくファクトリメソッドを使用 {@link TinyGadgetSupport#of}
      */
     @Deprecated(forRemoval = true)
     public TinyGadgetSupport(Stage stage) {
@@ -168,6 +169,7 @@ public class TinyGadgetSupport {
      * 
      * @param stage ガジェットの振る舞いを提供する対象 stage
      * @param prefs ガジェットの状態を保存する preferences
+     * @deprecated コンストラクタではなくファクトリメソッドを使用 {@link TinyGadgetSupport#of}
      */
     @Deprecated(forRemoval = true)
     public TinyGadgetSupport(Stage stage, Preferences prefs) {
