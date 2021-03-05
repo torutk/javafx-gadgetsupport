@@ -258,16 +258,14 @@ public class TinyGadgetSupport {
     }
     
     protected void setupResize() {
-        // Ctrol + マウスホイール操作でウィンドウの大きさを変更
+        // Ctrl + マウスホイール操作でウィンドウの大きさを変更
         scene.setOnScroll(event -> {
             if (event.isControlDown()) {
                 zoom(event.getDeltaY() > 0 ? 1.1 : 0.9);
             }
         });
         // タッチパネルのズーム（ピンチ）操作でウィンドウサイズを変更
-        scene.setOnZoom(event -> {
-            zoom(event.getZoomFactor());
-        });
+        scene.setOnZoom(event -> zoom(event.getZoomFactor()));
     }
     
     /**
@@ -294,9 +292,7 @@ public class TinyGadgetSupport {
     protected void setupContextMenu() {
         // マウス右クリックでポップアップメニューを表示
         ContextMenu popup = createContextMenu(transparentStage);
-        scene.setOnContextMenuRequested(event -> {
-            popup.show(transparentStage, event.getScreenX(), event.getScreenY());
-        });
+        scene.setOnContextMenuRequested(event -> popup.show(transparentStage, event.getScreenX(), event.getScreenY()));
     }
        
     /**
@@ -308,15 +304,13 @@ public class TinyGadgetSupport {
         MenuItem exitItem = new MenuItem("終了");
         exitItem.setStyle("-fx-font-size: 2em");
         exitItem.setOnAction(event -> stage.close());
-
-        ContextMenu popup = new ContextMenu(exitItem);
-        return popup;
+        return new ContextMenu(exitItem);
     }
     
     protected void setupStatusResume() {
         // ウィンドウが終了するときに状態を保存
         transparentStage.showingProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue == true && newValue == false) {
+            if (oldValue && !newValue) {
                 saveStatus();
             }
         });
