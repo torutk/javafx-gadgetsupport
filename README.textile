@@ -26,9 +26,8 @@ public class TinyGadgetApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        new TinyGadgetSupport(stage, Preferences.userNodeForPackage(this.getClass()));
+        TinyGadgetSupport.of(stage, Preferences.userNodeForPackage(this.getClass()));
         Parent root = FXMLLoader.load(getClass().getResource("TinyGadgetView.fxml"));
-        
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
@@ -37,3 +36,30 @@ public class TinyGadgetApp extends Application {
 }
 </pre>
 
+h2. Extra coding
+
+h3. Taskbarless gadget
+
+JavaFX Window with StageStyle.TRANSPARENT shows the application on the task bar.
+JavaFX Window with StageStyle.UTILITY doesn't show the application on the task bar.
+But current JavaFX Library has no function both TRANSPARENT and UTILITY.
+
+There is a workaround to use taskbarless TRANSPARENT window.
+
+* primary stage with UTILITY
+* secondary stage with TRANSPARENT
+* make primary stage invisible
+
+<pre>
+public class TinyGadgetApp extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        var support = TinyGadgetSupport.ofTaskbarless(primaryStage);
+        var root = ...
+        var scene = new Scene(root);
+        var stage = support.getTransparentStage();
+        stage.setScene(scene);
+        stage.show();
+    }
+</pre>
